@@ -1,3 +1,7 @@
+const SUPABASE_URL = "https://bglysjcokqmvwhtlkdwo.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJnbHlzamNva3FtdndodGxrZHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyMDAzMjcsImV4cCI6MjEwNjc3NjMyN30.o6gFObF4Xbwr2SYGAQLiXmbdkbGO1ZkmuVUsRKw0axM";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 const products = [
     {
         id: 1,
@@ -161,12 +165,14 @@ function renderProducts(list) {
         <p>Category: ${product.category}</p>
         <p>AED ${product.price.toLocaleString()}</p>
         <p class="stock">${stockLabel}</p>
+        
         <button
           ${product.stock === 0 ? "disabled" : ""}
           onclick="addToCart(${product.id})"
         >
           ${product.stock === 0 ? "Out of Stock" : "Add to Cart"}
         </button>
+        <a href="product-detail.html?id=${product.id}">View details</a>
       </div>
     `;
   });
@@ -174,8 +180,8 @@ function renderProducts(list) {
 
 
 // Add to cart
-function addToCart(productId) {
-  const product = products.find(product => product.id === productId);
+function addToCart(product_id) {
+  const product = products.find(product => product.id === product_id);
   if (!product) {
     return;
   }
@@ -232,3 +238,19 @@ if (sortSelect) {
 }
 // Show all products when page loads
 renderProducts(products);
+
+async function loadProducts() {
+  const { data: products, error } = await supabaseClient
+    .from("product")
+    .select("*, category(category_name)")
+    .order("name");
+ 
+  if (error) {
+    document.getElementById("product-list").innerHTML =
+      `<p>Could not load products: ${error.message}</p>`;
+    return;
+  }
+  renderProducts(products);
+}
+ 
+loadProducts(); 
