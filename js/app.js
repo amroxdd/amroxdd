@@ -2,6 +2,25 @@ const SUPABASE_URL = "https://bglysjcokqmvwhtlkdwo.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJnbHlzamNva3FtdndodGxrZHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyMDAzMjcsImV4cCI6MjEwNjc3NjMyN30.o6gFObF4Xbwr2SYGAQLiXmbdkbGO1ZkmuVUsRKw0axM";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+ document.getElementById("register-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const { error } = await supabase.auth.signUp({ email, password });
+  if (error) alert(error.message);
+  else { alert("Account created — you can now log in."); window.location.href = "login.html"; }
+});
+// login.html
+document.getElementById("login-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) alert(error.message);
+  else window.location.href = "index.html";
+});
+
+
 const products = [
     {
         id: 1,
@@ -159,6 +178,7 @@ function renderProducts(list) {
         ? "Low Stock"
         : "In Stock";
 
+
     container.innerHTML += `
       <div class="product">
         <h3>${product.name}</h3>
@@ -168,11 +188,11 @@ function renderProducts(list) {
         
         <button
           ${product.stock === 0 ? "disabled" : ""}
-          onclick="addToCart(${product.id})"
+          onclick="addToCart(${JSON.stringify(product)})"
         >
           ${product.stock === 0 ? "Out of Stock" : "Add to Cart"}
         </button>
-        <a href="product-detail.html?id=${product.id}">View details</a>
+        <a href="product-detail.html?id=${product.product_id}">View details</a>
       </div>
     `;
   });
@@ -254,3 +274,82 @@ async function loadProducts() {
 }
  
 loadProducts(); 
+
+//lab5
+function getCart() {
+  return JSON.parse(localStorage.getItem("cart") || "[]");
+}
+ 
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+ 
+function addToCart(product) {
+  const cart = getCart();
+  const existing = cart.find(item => item.product_id === product.product_id);
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push({ ...product, quantity: 1 });
+  }
+  saveCart(cart);
+}
+ 
+function removeFromCart(productId) {
+  saveCart(getCart().filter(item => item.product_id !== productId));
+
+  function updateQuantity(productId, quantity) {
+  if (quantity <= 0) return removeFromCart(productId);
+  const cart = getCart().map(item =>
+    item.product_id === productId ? { ...item, quantity } : item
+  );
+  saveCart(cart);
+}
+
+}
+
+function renderCart() {
+  const cart = getCart();
+  const container = document.getElementById("cart-items");
+  if (cart.length === 0) {
+    container.innerHTML = "<p>Your cart is empty.</p>";
+    return;
+  }
+  let subtotal = 0;
+  container.innerHTML = cart.map(item => {
+    subtotal += item.price * item.quantity;
+    return `
+      <div>
+        <span>${item.name}</span>
+        <input type="number" value="${item.quantity}"
+          onchange="updateQuantity(${item.product_id}, this.value); renderCart();">
+        <span>AED ${(item.price * item.quantity).toFixed(2)}</span>
+        <button onclick="removeFromCart(${item.product_id}); renderCart();">Remove</button>
+      </div>`;
+  }).join('');
+  document.getElementById("subtotal").textContent = subtotal.toFixed(2);
+}
+renderCart();
+
+async function updateNavForAuth() {
+  const { data: { user } } = await supabase.auth.getUser();
+  const navSlot = document.getElementById("auth-nav-slot");
+  if (user) {
+    navSlot.innerHTML = `<span>Hi, ${user.email}</span> <a href="#" onclick="logout()">Log out</a>`;
+  } else {
+    navSlot.innerHTML = `<a href="login.html">Login</a>`;
+  }
+}
+ 
+async function logout() {
+  await supabase.auth.signOut();
+  window.location.href = "index.html";
+}
+ 
+updateNavForAuth();
+
+async function requireLogin() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) window.location.href = "login.html";
+  return user;
+}
