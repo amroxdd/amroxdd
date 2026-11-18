@@ -99,12 +99,12 @@ low price without a hand-written regex.
 
 ## 7. Lab 8: dashboard results and insights
 
-KPIs (orders that are not Cancelled): total revenue **AED 45,110**, **10** orders, **1** customer, average order value **AED 4,511**.
-Revenue by category: Computers 33,490 · Accessories 8,821 · Phones 2,799. Monthly: Aug 13,482 · Sep 3,642 · Oct 12,411 · Nov 15,575.
+KPIs (orders that are not Cancelled): total revenue **AED 49,895**, **11** orders, **1** customer, average order value **AED 4,535.91**.
+Revenue by category: Computers 36,989 · Accessories 10,107 · Phones 2,799. Monthly: Aug 13,482 · Sep 3,642 · Oct 12,411 · Nov 20,360.
 
-1. Computers earned AED 33,490 of AED 45,110 revenue (74%), although they are only 6 of the 20 products (30%).
-2. Accessories sell the most units: USB-C Cable 9, Wireless Mouse 8, AirPods Pro 7. Keyboard has only 3 left, so restock it.
-3. Revenue fell in September (AED 3,642) but rose in October (12,411) and November (15,575, +25% month on month).
+1. Computers earned AED 36,989 of AED 49,895 revenue (74%), although they are only 6 of the 20 products (30%).
+2. Accessories sell the most units: Wireless Mouse 11, USB-C Cable 9, AirPods Pro 8. Keyboard has only 3 left, so restock it.
+3. Revenue fell in September (AED 3,642) but rose in October (12,411) and November (20,360, +64% month on month).
 4. Samsung Galaxy S25 (8 in stock), Tablet (7) and iPhone 15 (5) sold 0 units, so they should be promoted.
 
 ## 8. Lab 6: where a payment gateway fits
