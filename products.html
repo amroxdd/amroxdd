@@ -3,44 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ShopNow — Products</title>
+  <title>ShopNow - Products</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/app.js"></script>
   <header class="site-header">
     <h1 class="logo">ShopNow</h1>
-
     <nav class="main-nav">
       <a href="index.html">Home</a>
       <a href="products.html">Products</a>
       <a href="cart.html">Cart</a>
       <a href="about.html">About</a>
+      <span id="auth-nav-slot"></span>
     </nav>
   </header>
 
   <main>
-
     <section class="products-header">
       <h2>Our Products</h2>
       <p>Find the technology you need at honest prices.</p>
     </section>
 
+    <section class="smart-box">
+      <label for="smart-search">Smart search</label>
+      <input type="text" id="smart-search" placeholder='Try: "laptop under 3000" or "accessories under 200"'>
+      <div id="smart-results"></div>
+    </section>
+
     <section class="filters">
+      <input type="text" id="search-box" placeholder="Search products...">
 
-      <input
-        type="text"
-        id="search-box"
-        placeholder="Search products..."
-      >
-
-      <div class="category-buttons">
-        <button class="category-btn" data-category="All">All</button>
-        <button class="category-btn" data-category="Computers">Computers</button>
-        <button class="category-btn" data-category="Phones">Phones</button>
-        <button class="category-btn" data-category="Accessories">Accessories</button>
+      <div id="category-buttons" class="category-buttons">
+        <button class="category-btn active" data-category="All">All</button>
       </div>
 
       <select id="sort-select">
@@ -48,18 +42,15 @@
         <option value="low-high">Price: Low to High</option>
         <option value="high-low">Price: High to Low</option>
       </select>
-
     </section>
 
     <section class="product-grid" id="product-list"></section>
-
   </main>
 
-  <footer class="site-footer">
-    <p>&copy; 2025 ShopNow.</p>
-  </footer>
+  <footer class="site-footer"><p>&copy; 2025 ShopNow.</p></footer>
 
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/app.js"></script>
 
 </body>
 </html>
