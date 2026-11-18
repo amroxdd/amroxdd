@@ -99,7 +99,7 @@ low price without a hand-written regex.
 
 ## 7. Lab 8: dashboard results and insights
 
-KPIs (orders that are not Cancelled): total revenue **AED 45,110**, **10** orders, **2** customers, average order value **AED 4,511**.
+KPIs (orders that are not Cancelled): total revenue **AED 45,110**, **10** orders, **1** customer, average order value **AED 4,511**.
 Revenue by category: Computers 33,490 · Accessories 8,821 · Phones 2,799. Monthly: Aug 13,482 · Sep 3,642 · Oct 12,411 · Nov 15,575.
 
 1. Computers earned AED 33,490 of AED 45,110 revenue (74%), although they are only 6 of the 20 products (30%).
