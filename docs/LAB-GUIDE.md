@@ -114,3 +114,21 @@ real gateway such as Stripe, one step goes between "checkout form submitted" and
 cart total to a small server function, which creates a Stripe payment. The customer pays on Stripe's secure page. Stripe then
 tells our server, through a webhook, that the charge succeeded. Only then is the order inserted, with status Paid, and the
 customer sent to the confirmation page. The Stripe secret key lives only on that server, never in the browser.
+
+## 9. Lab 10: deployment and security review
+
+- Live site (GitHub Pages, main branch, root folder): https://amroxdd.github.io/amroxdd/
+- Every push to `main` redeploys the site in about a minute.
+- Tested live: products, search, smart search, cart, login, checkout and order confirmation (order #13).
+- All requests use HTTPS: static files from `amroxdd.github.io`, data from `bglysjcokqmvwhtlkdwo.supabase.co`.
+- Note: the free Supabase project pauses after about a week without use. If products stop loading, open the
+  Supabase dashboard and click **Resume project**.
+
+Security risks and mitigations:
+
+1. Total and status are set in the browser. Mitigation: calculate them in a database trigger or RPC function.
+2. order_item price is sent by the browser. Mitigation: a trigger that copies the price from `product`.
+3. Stock is never reduced. Mitigation: place the order in one RPC function that checks and reduces stock.
+4. Checkout input is only validated in the browser. Mitigation: NOT NULL and length CHECK constraints.
+5. innerHTML is used for user text (currently escaped with `escapeHtml`). Mitigation: keep escaping, add a CSP.
+6. RLS covers all 5 tables; anonymous requests to `orderr` return `[]`. Mitigation: review policies for every new table.
